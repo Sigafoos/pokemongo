@@ -1,1 +1,1 @@
-module git.theconley.club/dconley/pokemon-go
+module github.com/Sigafoos/pokemon-go

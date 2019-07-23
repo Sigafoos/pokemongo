@@ -8,7 +8,7 @@ import (
 	"io"
 	"io/ioutil"
 
-	"git.theconley.club/dconley/pokemon-go/pokemon"
+	"github.com/Sigafoos/pokemon-go/pokemon"
 )
 
 // Gamemaster is the parsed gamemaster.json file. The file itself contains cups (Silph Arena), moves,
