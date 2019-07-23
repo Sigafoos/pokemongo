@@ -1,1 +1,1 @@
-module github.com/Sigafoos/pokemon-go
+module github.com/Sigafoos/pokemongo

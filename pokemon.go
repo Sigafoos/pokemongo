@@ -1,6 +1,6 @@
 // Package pokemon provides objects and methods representing a Pokemon in Pokemon Go. It does not
-// provide a "New" function: to load from a gamemaster.json, use the gamemaster package's PokemonBy.* methods.
-package pokemon
+// provide a "New" function: to load from a gamemaster.json, use the gamemaster type's PokemonBy.* methods.
+package pokemongo
 
 import (
 	"math"
