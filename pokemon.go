@@ -1,9 +1,13 @@
-// Package pokemon provides objects and methods representing a Pokemon in Pokemon Go. It does not
-// provide a "New" function: to load from a gamemaster.json, use the gamemaster type's PokemonBy.* methods.
+// Package pokemon provides objects and methods representing a Pokemon in Pokemon Go.
 package pokemongo
 
 import (
+	"fmt"
+	"io"
+	"io/ioutil"
 	"math"
+
+	"gopkg.in/yaml.v3"
 )
 
 // CPM is the combat multiplier used when calculating CP. Each entry is a half level: index 0 is
@@ -91,7 +95,8 @@ var CPM = []float64{
 }
 
 // Pokemon represents a Pokemon, including its stats. It can be created from a gamemaster.json file
-// or saved -- via Save() -- into yaml.
+// or saved -- via Save() -- into yaml. yaml was chosen over json due to being more easily read and
+// changed by humans, as we won't need the specificity that json provides.
 type Pokemon struct {
 	ID              string `json:"speciesId"`
 	Dex             int    `json:"dex"`
@@ -115,8 +120,40 @@ type Stats struct {
 
 // Moves are a Pokemon's moves. They can have one fast and one or two charge.
 type Moves struct {
-	Fast   string    `yaml:"Fast"`
-	Charge [2]string `yaml:"Charge"`
+	Fast   string
+	Charge [2]string
+}
+
+// Load will create a pokemon object with values from an external
+// yaml source (presumably a file).
+func Load(fp io.Reader) (*Pokemon, error) {
+	body, err := ioutil.ReadAll(fp)
+	if err != nil {
+		return nil, fmt.Errorf("error reading pokemon: %s", err.Error())
+	}
+
+	fmt.Println(string(body))
+	var p Pokemon
+	err = yaml.Unmarshal(body, &p)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshalling pokemon: %s", err.Error())
+	}
+
+	return &p, nil
+}
+
+// Save will persist a Pokemon's stats (presumably to a file) as yaml.
+func (p *Pokemon) Save(fp io.Writer) error {
+	body, err := yaml.Marshal(p)
+	if err != nil {
+		return fmt.Errorf("error marshalling yaml: %s", err.Error())
+	}
+
+	_, err = fp.Write(body)
+	if err != nil {
+		return fmt.Errorf("error writing: %s", err.Error())
+	}
+	return nil
 }
 
 // Calculate will use the level and IVs of a Pokemon to calculate its CP and final stats. If they
