@@ -132,7 +132,6 @@ func Load(fp io.Reader) (*Pokemon, error) {
 		return nil, fmt.Errorf("error reading pokemon: %s", err.Error())
 	}
 
-	fmt.Println(string(body))
 	var p Pokemon
 	err = yaml.Unmarshal(body, &p)
 	if err != nil {
