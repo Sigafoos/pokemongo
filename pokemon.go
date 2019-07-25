@@ -107,6 +107,8 @@ type Pokemon struct {
 	Level           float64
 	CP              int
 	Moves           Moves
+	FastMoves       []string `json:"fastMoves" yaml:"-"`
+	ChargeMoves     []string `json:"chargedMoves" yaml:"-"`
 }
 
 // Stats represent the three statistics of a Pokemon: attack, defense, and stamina/HP. This is used
