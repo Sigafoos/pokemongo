@@ -157,17 +157,12 @@ func (p *Pokemon) Save(fp io.Writer) error {
 	return nil
 }
 
-// Calculate will use the level and IVs of a Pokemon to calculate its CP and final stats. If they
-// have already been calculated this will be a no-op.
+// Calculate will use the level and IVs of a Pokemon to calculate its CP and final stats.
 //
 // CalculatedStats are saved separately, as it's useful to know the stat product of a Pokemon. The
 // calculated stats include the rounded down HP and as such is different from what's used to calculate
 // CP.
 func (p *Pokemon) Calculate() {
-	if p.CP > 0 {
-		return
-	}
-
 	level := int((p.Level - 1) * 2)
 	attack := (p.BaseStats.Attack + p.IVs.Attack) * CPM[level]
 	defense := (p.BaseStats.Defense + p.IVs.Defense) * CPM[level]
