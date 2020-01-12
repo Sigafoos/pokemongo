@@ -106,6 +106,7 @@ type Pokemon struct {
 	CalculatedStats Stats
 	Level           float64
 	CP              int
+	Shadow          bool
 	Moves           Moves
 	FastMoves       []string `json:"fastMoves" yaml:"-"`
 	ChargeMoves     []string `json:"chargedMoves" yaml:"-"`

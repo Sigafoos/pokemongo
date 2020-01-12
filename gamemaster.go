@@ -10,10 +10,12 @@ import (
 // Gamemaster is the parsed gamemaster.json file. The file itself contains cups (Silph Arena), moves,
 // pokemon and settings, but currently only the pokemon are supported by this type.
 type Gamemaster struct {
-	Pokemon []Pokemon `json:"pokemon"`
-	dexMap  map[int]*Pokemon
-	nameMap map[string]*Pokemon
-	idMap   map[string]*Pokemon
+	Pokemon   []Pokemon `json:"pokemon"`
+	Shadow    []string  `json:"shadowPokemon"`
+	shadowMap map[string]bool
+	dexMap    map[int]*Pokemon
+	nameMap   map[string]*Pokemon
+	idMap     map[string]*Pokemon
 }
 
 // NewGamemaster instantiates a Gamemaster object. It expects the data to be marshalled in json.
@@ -30,6 +32,11 @@ func NewGamemaster(fp io.Reader) (*Gamemaster, error) {
 		return nil, fmt.Errorf("error unmarshalling gamemaster: %s", err.Error())
 	}
 
+	gm.shadowMap = make(map[string]bool)
+	for _, p := range gm.Shadow {
+		gm.shadowMap[p] = true
+	}
+
 	gm.dexMap = make(map[int]*Pokemon)
 	gm.nameMap = make(map[string]*Pokemon)
 	gm.idMap = make(map[string]*Pokemon)
@@ -37,6 +44,9 @@ func NewGamemaster(fp io.Reader) (*Gamemaster, error) {
 	// iterate over the list of Pokemon once and populate the lookup maps.
 	for k := range gm.Pokemon {
 		p := gm.Pokemon[k]
+		if _, ok := gm.shadowMap[p.ID]; ok {
+			p.Shadow = true
+		}
 		gm.dexMap[p.Dex] = &p
 		gm.nameMap[p.Name] = &p
 		gm.idMap[p.ID] = &p

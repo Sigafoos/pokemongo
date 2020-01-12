@@ -43,6 +43,7 @@ calculatedstats:
     hp: 217
 level: 28
 cp: 1489
+shadow: false
 moves:
     fast: CHARM
     charge:
